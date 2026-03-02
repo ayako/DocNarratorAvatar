@@ -14,6 +14,38 @@ logger = logging.getLogger(__name__)
 
 _POLL_INTERVAL = 10   # seconds between status checks
 _MAX_WAIT = 600       # maximum total wait time in seconds
+_STANDARD_PHOTO_AVATARS = {
+    "adrian",
+    "amara",
+    "amira",
+    "anika",
+    "bianca",
+    "camila",
+    "carlos",
+    "clara",
+    "darius",
+    "diego",
+    "elise",
+    "farhan",
+    "faris",
+    "gabrielle",
+    "hyejin",
+    "imran",
+    "isabella",
+    "layla",
+    "liwei",
+    "ling",
+    "marcus",
+    "matteo",
+    "rahul",
+    "rana",
+    "ren",
+    "riya",
+    "sakura",
+    "simone",
+    "zayd",
+    "zoe",
+}
 
 
 class AvatarService:
@@ -27,6 +59,9 @@ class AvatarService:
         )
         self._character: str = os.environ.get("AVATAR_CHARACTER", "Sakura")
         self._style: str = os.environ.get("AVATAR_STYLE", "")
+        self._photo_base_model: str = os.environ.get(
+            "AVATAR_PHOTO_BASE_MODEL", "vasa-1"
+        )
         self._voice: str = os.environ.get(
             "AVATAR_VOICE", "ja-JP-Nanami:DragonHDLatestNeural"
         )
@@ -82,7 +117,10 @@ class AvatarService:
             "backgroundColor": "#FFFFFFFF",
         }
 
-        if self._style:
+        if self._is_standard_photo_avatar() and self._photo_base_model:
+            avatar_config["photoAvatarBaseModel"] = self._photo_base_model
+
+        if self._style and not self._is_standard_photo_avatar():
             avatar_config["talkingAvatarStyle"] = self._style
 
         payload = {
@@ -134,6 +172,17 @@ class AvatarService:
 
             if status in ("Failed", "Canceled"):
                 error = data.get("properties", {}).get("error", {})
+                if (
+                    error.get("code") == "BadRequest"
+                    and "not supported" in str(error.get("message", "")).lower()
+                ):
+                    raise RuntimeError(
+                        "アバター合成が失敗しました: "
+                        f"{error}. AVATAR_CHARACTER={self._character}, "
+                        f"AZURE_SPEECH_REGION={self._region}, "
+                        f"AVATAR_PHOTO_BASE_MODEL={self._photo_base_model} "
+                        "を確認してください"
+                    )
                 raise RuntimeError(f"アバター合成が失敗しました: {error}")
 
         raise TimeoutError(
@@ -170,3 +219,7 @@ class AvatarService:
         if len(parts) >= 2:
             return f"{parts[0]}-{parts[1]}"
         return "ja-JP"
+
+    def _is_standard_photo_avatar(self) -> bool:
+        """Return True when the configured character is a standard photo avatar."""
+        return self._character.strip().lower() in _STANDARD_PHOTO_AVATARS

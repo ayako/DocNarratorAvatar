@@ -48,7 +48,8 @@ cp .env.example .env
 | `AZURE_SPEECH_KEY` | Azure AI Speech のサブスクリプションキー | ✅ |
 | `AZURE_SPEECH_REGION` | リージョン（デフォルト: `eastus`） | — |
 | `AVATAR_CHARACTER` | Photo Avatar モデル名（デフォルト: `Sakura`） | — |
-| `AVATAR_STYLE` | アバタースタイル（省略可。Photo Avatar では空文字推奨） | — |
+| `AVATAR_STYLE` | アバタースタイル（Video Avatar 用。Photo Avatar では空文字） | — |
+| `AVATAR_PHOTO_BASE_MODEL` | Photo Avatar ベースモデル（デフォルト: `vasa-1`） | — |
 | `AVATAR_VOICE` | 音声名（デフォルト: `ja-JP-Nanami:DragonHDLatestNeural`） | — |
 
 ### 起動
