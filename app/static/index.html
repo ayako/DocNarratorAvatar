@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocNarratorAvatar</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="header__inner">
+      <span class="header__logo">🎙️</span>
+      <h1 class="header__title">DocNarratorAvatar</h1>
+      <p class="header__subtitle">ドキュメントをアップロードしてアバターに読み上げてもらいましょう</p>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- ===== Upload panel ===== -->
+    <section id="upload-panel" class="card">
+      <h2 class="card__title">ドキュメントをアップロード</h2>
+      <p class="card__desc">対応形式: PowerPoint (.pptx), PDF, Word (.docx), テキスト (.txt)</p>
+
+      <div id="drop-zone" class="drop-zone" role="button" tabindex="0"
+           aria-label="ドキュメントをドロップするか、クリックして選択してください">
+        <div class="drop-zone__icon">📄</div>
+        <p class="drop-zone__text">ここにファイルをドロップ<br>または<br><span class="link">クリックして選択</span></p>
+        <input type="file" id="file-input"
+               accept=".pptx,.ppt,.pdf,.docx,.doc,.txt"
+               aria-label="ファイルを選択" />
+      </div>
+
+      <p id="selected-file" class="selected-file" aria-live="polite"></p>
+
+      <button id="upload-btn" class="btn btn--primary" disabled>
+        処理を開始する
+      </button>
+    </section>
+
+    <!-- ===== Processing panel ===== -->
+    <section id="processing-panel" class="card hidden">
+      <h2 class="card__title">処理中...</h2>
+      <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div id="progress-fill" class="progress-bar__fill"></div>
+      </div>
+      <p id="progress-step" class="progress-step" aria-live="polite"></p>
+      <ul class="steps">
+        <li id="step-1" class="step">📄 ドキュメント解析</li>
+        <li id="step-2" class="step">🤖 AI スクリプト生成</li>
+        <li id="step-3" class="step">🎬 アバター動画生成</li>
+      </ul>
+    </section>
+
+    <!-- ===== Result panel ===== -->
+    <section id="result-panel" class="card hidden">
+      <h2 class="card__title">処理が完了しました 🎉</h2>
+
+      <!-- Play button (shown before playback) -->
+      <div id="play-cta" class="play-cta">
+        <button id="play-btn" class="btn btn--play">
+          ▶ 再生を開始する
+        </button>
+      </div>
+
+      <!-- Player area (shown after clicking play) -->
+      <div id="player-area" class="player-area hidden">
+        <div class="player-wrapper">
+          <video id="avatar-video" class="avatar-video" controls playsinline>
+            お使いのブラウザは video タグをサポートしていません。
+          </video>
+          <!-- Caption overlay -->
+          <div id="caption-overlay" class="caption-overlay" aria-live="polite"></div>
+        </div>
+
+        <!-- Key points sidebar -->
+        <aside class="key-points">
+          <h3 class="key-points__title">📌 要点</h3>
+          <ul id="key-points-list" class="key-points__list"></ul>
+        </aside>
+      </div>
+
+      <!-- Script (no video) -->
+      <div id="script-area" class="script-area hidden">
+        <h3 class="script-area__title">📝 ナレータースクリプト</h3>
+        <p id="script-text" class="script-text"></p>
+        <h3 class="script-area__title">📌 要点</h3>
+        <ul id="script-captions-list" class="key-points__list"></ul>
+      </div>
+
+      <button id="restart-btn" class="btn btn--secondary">
+        ↩ 別のドキュメントを処理する
+      </button>
+    </section>
+
+    <!-- ===== Error panel ===== -->
+    <section id="error-panel" class="card card--error hidden">
+      <h2 class="card__title">エラーが発生しました</h2>
+      <p id="error-msg" class="error-msg" aria-live="assertive"></p>
+      <button id="retry-btn" class="btn btn--secondary">↩ やり直す</button>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Powered by Azure OpenAI &amp; Azure AI Speech Talking Avatar</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
