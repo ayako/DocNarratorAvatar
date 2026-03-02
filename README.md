@@ -6,7 +6,7 @@
 |------|------|
 | 📄 ドキュメント対応 | PowerPoint (.pptx), PDF, Word (.docx), テキスト (.txt) |
 | 🔄 PPT 変換 | LibreOffice が利用可能な場合は PDF/PNG に変換 |
-| 🤖 AI 要約 | Azure OpenAI (GPT-4o) でナレータースクリプトと要点キャプションを生成 |
+| 🤖 AI 要約 | Azure OpenAI (gpt-4.1) でナレータースクリプトと要点キャプションを生成 |
 | 🎬 アバター動画 | Azure AI Speech Talking Avatar でアバターが読み上げる MP4 を生成 |
 | 🌐 フロントエンド | シンプルな HTML/CSS/JavaScript |
 | ⚙️ バックエンド | Python (FastAPI) REST API |
@@ -20,7 +20,7 @@
 ### 必要条件
 
 - Python 3.11 以上
-- Azure OpenAI リソース（GPT-4o デプロイ）
+- Azure OpenAI リソース（gpt-4.1 デプロイ）
 - Azure AI Speech リソース（Talking Avatar 対応リージョン）
 
 ### インストール
@@ -44,12 +44,12 @@ cp .env.example .env
 | `AZURE_OPENAI_ENDPOINT` | Azure OpenAI のエンドポイント URL | ✅ |
 | `AZURE_OPENAI_API_KEY` | Azure OpenAI の API キー | ✅ |
 | `AZURE_OPENAI_API_VERSION` | API バージョン（デフォルト: `2024-02-01`） | — |
-| `AZURE_OPENAI_DEPLOYMENT` | デプロイメント名（デフォルト: `gpt-4o`） | — |
+| `AZURE_OPENAI_DEPLOYMENT` | デプロイメント名（デフォルト: `gpt-4.1`） | — |
 | `AZURE_SPEECH_KEY` | Azure AI Speech のサブスクリプションキー | ✅ |
 | `AZURE_SPEECH_REGION` | リージョン（デフォルト: `eastus`） | — |
-| `AVATAR_CHARACTER` | アバターキャラクター（デフォルト: `lisa`） | — |
-| `AVATAR_STYLE` | アバタースタイル（デフォルト: `casual-sitting`） | — |
-| `AVATAR_VOICE` | 音声名（デフォルト: `ja-JP-NanamiNeural`） | — |
+| `AVATAR_CHARACTER` | Photo Avatar モデル名（デフォルト: `Sakura`） | — |
+| `AVATAR_STYLE` | アバタースタイル（省略可。Photo Avatar では空文字推奨） | — |
+| `AVATAR_VOICE` | 音声名（デフォルト: `ja-JP-Nanami:DragonHDLatestNeural`） | — |
 
 ### 起動
 

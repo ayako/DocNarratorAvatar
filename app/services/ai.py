@@ -47,7 +47,7 @@ class AIService:
             api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-02-01"),
             azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT", ""),
         )
-        self._deployment = os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4o")
+        self._deployment = os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1")
 
     async def generate_script_and_captions(
         self, document_text: str

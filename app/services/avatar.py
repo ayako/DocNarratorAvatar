@@ -22,15 +22,20 @@ class AvatarService:
     def __init__(self) -> None:
         self._speech_key: str = os.environ.get("AZURE_SPEECH_KEY", "")
         self._region: str = os.environ.get("AZURE_SPEECH_REGION", "eastus")
-        self._character: str = os.environ.get("AVATAR_CHARACTER", "lisa")
-        self._style: str = os.environ.get("AVATAR_STYLE", "casual-sitting")
-        self._voice: str = os.environ.get("AVATAR_VOICE", "ja-JP-NanamiNeural")
+        self._api_version: str = os.environ.get(
+            "AZURE_SPEECH_AVATAR_API_VERSION", "2024-08-01"
+        )
+        self._character: str = os.environ.get("AVATAR_CHARACTER", "Sakura")
+        self._style: str = os.environ.get("AVATAR_STYLE", "")
+        self._voice: str = os.environ.get(
+            "AVATAR_VOICE", "ja-JP-Nanami:DragonHDLatestNeural"
+        )
 
     @property
     def _base_url(self) -> str:
         return (
-            f"https://{self._region}.customvoice.api.speech.microsoft.com"
-            "/api/texttospeech/3.1-preview1/batchsynthesis/talkingavatar"
+            f"https://{self._region}.api.cognitive.microsoft.com"
+            "/avatar/batchsyntheses"
         )
 
     # ------------------------------------------------------------------
@@ -66,20 +71,25 @@ class AvatarService:
     async def _create_job(self, script: str) -> str:
         """Submit a batch synthesis job and return its *synthesis_id*."""
         synthesis_id = uuid.uuid4().hex
-        url = f"{self._base_url}/{synthesis_id}"
+        url = f"{self._base_url}/{synthesis_id}?api-version={self._api_version}"
         ssml = self._build_ssml(script)
 
-        payload = {
-            "synthesisConfig": {"voice": self._voice},
+        avatar_config = {
             "talkingAvatarCharacter": self._character,
-            "talkingAvatarStyle": self._style,
-            "videoFormat": "mp4",
+            "videoFormat": "Mp4",
             "videoCodec": "h264",
             "subtitleType": "soft_embedded",
             "backgroundColor": "#FFFFFFFF",
+        }
+
+        if self._style:
+            avatar_config["talkingAvatarStyle"] = self._style
+
+        payload = {
+            "inputKind": "SSML",
             "inputs": [{"content": ssml}],
+            "avatarConfig": avatar_config,
             "properties": {
-                "outputFormat": "riff-24khz-16bit-mono-pcm",
                 "timeToLiveInHours": 24,
             },
         }
@@ -101,7 +111,7 @@ class AvatarService:
 
         Returns the output video URL on success.
         """
-        url = f"{self._base_url}/{synthesis_id}"
+        url = f"{self._base_url}/{synthesis_id}?api-version={self._api_version}"
         headers = {"Ocp-Apim-Subscription-Key": self._speech_key}
         elapsed = 0
 
