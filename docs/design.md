@@ -6,6 +6,10 @@
 Azure OpenAI でナレータースクリプトとキャプションを生成し、
 Azure AI Speech Talking Avatar がそのスクリプトを読み上げる動画を自動生成するWebアプリ。
 
+## 画面イメージ
+
+![DocNarratorAvatar UI](DocNarrotorAvatar_202603.png)
+
 ---
 
 ## 2. 要件

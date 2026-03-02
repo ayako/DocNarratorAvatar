@@ -13,6 +13,10 @@
 
 設計ドキュメント → [`docs/design.md`](docs/design.md)
 
+## 画面イメージ
+
+![DocNarratorAvatar UI](docs/DocNarrotorAvatar_202603.png)
+
 ---
 
 ## セットアップ
